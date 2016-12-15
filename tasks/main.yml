@@ -1,0 +1,12 @@
+---
+- include: install/install-syslog-ng.yml
+  tags: install_syslog_ng
+
+- include: install/install-syslog-ng-source.yml
+  tags: install_syslog_ng_source
+
+- include: install/install-syslog-ng-systemd.yml
+  tags: install_syslog_ng_systemd
+
+- include: configure/configure-syslog-ng.yml
+  tags: configure_syslog_ng

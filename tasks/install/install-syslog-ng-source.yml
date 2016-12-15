@@ -1,0 +1,99 @@
+---
+- name: remove default syslog-ng
+  apt: pkg={{ item }}
+       update_cache=yes
+       state=absent
+
+  with_items:
+  - syslog-ng
+
+
+- name: install syslog-ng compile dependencies
+  apt: pkg={{ item }}
+       update_cache=yes
+       state=present
+
+  with_items:
+  - build-essential
+  - flex
+  - bison
+
+
+- name: install glib
+  command: apt-get install glib-2.0 -y
+
+
+- name: make syslog-ng and dependency folders
+  file: path={{ item }}
+        state=directory
+        recurse=yes
+        owner={{ user }}
+        group={{ user }}
+        mode=0755
+
+  with_items:
+  - "{{ syslog_ng_download }}"
+  - "{{ pkgconfig_download }}"
+
+
+- name: download pkgconfig archive
+  get_url: url=http://pkgconfig.freedesktop.org/releases/{{ pkgconfig_archive }}
+           dest={{ pkgconfig_download }}{{ pkgconfig_archive }}
+           force=no
+
+
+- name: unpack pkgconfig archive
+  command: tar -xvzf {{ pkgconfig_archive }} chdir={{ pkgconfig_download }} creates={{ pkgconfig_download }}{{ pkgconfig_folder }}
+
+
+- name: configure pkgconfig compilation
+  command: ./configure --with-internal-glib chdir={{ pkgconfig_download }}{{ pkgconfig_folder }} creates=/etc/syslog-ng/syslog-ng.conf
+
+
+- name: compile pkgconfig
+  command: make install chdir={{ pkgconfig_download }}{{ pkgconfig_folder }} creates=/etc/syslog-ng/syslog-ng.conf
+  ignore_errors: yes
+
+
+- name: download eventlog archive
+  get_url: url=https://my.balabit.com/downloads/eventlog/0.2/{{ eventlog_archive }}
+           dest={{ syslog_ng_download }}{{ eventlog_archive }}
+           force=no
+
+
+- name: unpack eventlog archive
+  command: tar -xvzf {{ eventlog_archive }} chdir={{ syslog_ng_download }} creates={{ syslog_ng_download }}{{ eventlog_folder }}
+
+
+- name: configure eventlog
+  command: ./configure chdir={{ syslog_ng_download }}{{ eventlog_folder }} creates=/etc/syslog-ng/syslog-ng.conf
+
+
+- name: make eventlog
+  command: make chdir={{ syslog_ng_download }}{{ eventlog_folder }} creates=/etc/syslog-ng/syslog-ng.conf
+
+
+- name: make install eventlog
+  command: make install chdir={{ syslog_ng_download }}{{ eventlog_folder }} creates=/etc/syslog-ng/syslog-ng.conf
+
+
+- name: download syslog-ng archive
+  get_url: url=https://github.com/balabit/syslog-ng/releases/download/{{ syslog_ng_folder }}/{{ syslog_ng_archive }}
+           dest={{ syslog_ng_download }}{{ syslog_ng_archive }}
+           force=no
+
+
+- name: unpack syslog-ng archive
+  command: tar -xvzf {{ syslog_ng_archive }} chdir={{ syslog_ng_download }} creates={{ syslog_ng_download }}{{ syslog_ng_folder }}
+
+
+- name: configure syslog-ng compilation
+  command: ./configure chdir={{ syslog_ng_download }}{{ syslog_ng_folder }} creates=/etc/syslog-ng/syslog-ng.conf
+
+
+- name: make syslog-ng compilation
+  command: make chdir={{ syslog_ng_download }}{{ syslog_ng_folder }} creates=/etc/syslog-ng/syslog-ng.conf
+
+
+- name: make install syslog-ng compilation
+  command: make install chdir={{ syslog_ng_download }}{{ syslog_ng_folder }} creates=/etc/syslog-ng/syslog-ng.conf

@@ -1,0 +1,9 @@
+---
+- name: syslog-ng
+  hosts: all
+  user: root
+  become: true
+  roles:
+  - "syslog-ng"
+  vars_files:
+  - vars/versions.yml

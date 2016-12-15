@@ -1,0 +1,17 @@
+---
+- name: remove rsyslog if present
+  apt: pkg={{ item }}
+       update_cache=yes
+       state=absent
+
+  with_items:
+  - rsyslog
+
+
+- name: install latest syslog-ng
+  apt: pkg={{ item }}
+       update_cache=yes
+       state=latest
+
+  with_items:
+  - syslog-ng

@@ -1,0 +1,9 @@
+---
+- name: restart syslog-ng
+  service: name=syslog-ng state=restarted
+
+- name: start syslog-ng
+  service: name=syslog-ng state=started
+
+- name: stop syslog-ng
+  service: name=syslog-ng state=stopped

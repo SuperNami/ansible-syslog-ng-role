@@ -1,0 +1,8 @@
+---
+- name: copy syslog-ng.service
+  template: src=syslog-ng.service
+            dest=/lib/systemd/syslog-ng.service
+            owner=root
+            group=root
+            mode=0644
+  notify: restart syslog-ng

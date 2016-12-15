@@ -1,0 +1,22 @@
+---
+# Syslog-ng
+# https://github.com/balabit/syslog-ng/releases
+#
+syslog_ng_download: /opt/downloads/syslog-ng/
+syslog_ng_archive: syslog-ng-3.8.1.tar.gz
+syslog_ng_folder: syslog-ng-3.8.1
+
+
+# Eventlog archive
+# https://my.balabit.com/downloads/eventlog/0.2/
+#
+eventlog_archive: eventlog_0.2.12.tar.gz
+eventlog_folder: eventlog-0.2.12
+
+
+# Pkg config
+# http://pkgconfig.freedesktop.org/releases/
+#
+pkgconfig_download: /opt/downloads/pkgconfig/
+pkgconfig_archive: pkg-config-0.29.1.tar.gz
+pkgconfig_folder: pkg-config-0.29.1
